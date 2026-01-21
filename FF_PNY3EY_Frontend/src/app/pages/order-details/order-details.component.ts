@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { OrderService, Project } from '../../services/order.service';
 import { ActivatedRoute } from '@angular/router';
+import { Modal } from 'bootstrap';
 
 @Component({
   selector: 'app-order-details',
@@ -95,6 +96,8 @@ export class OrderDetailsComponent {
       modal?.hide();
     }
   }
+
+  
 
 }
   
