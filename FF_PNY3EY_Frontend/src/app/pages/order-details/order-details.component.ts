@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { OrderService, Project } from '../../services/order.service';
 import { ActivatedRoute } from '@angular/router';
 import { Modal } from 'bootstrap';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-order-details',
@@ -47,19 +48,29 @@ export class OrderDetailsComponent {
     });
   }
 
-  createProject(form: NgForm): void {
-    if (form.invalid || !this.orderId) return;
+  createProject(): void {
+    if (!this.newProject.projectName || !this.newProject.projectManager || this.newProject.price <= 0) {
+      alert('Hiba: Kérlek töltsd ki a kötelező mezőket (Név, Menedzser, Ár)!');
+      return;
+    }
 
-    // Megjegyzés: A service hívásnál megtartottam a paramétereket, ahogy írtad
     this.orderService.createProject(this.newProject, this.newProject.packageDemand).subscribe({
       next: () => {
         this.loadProjects();
-        this.hideModal('newProjectModal');
-        // A form resetelését rábízhatjuk az újranyitáskori initEmptyProject-re, 
-        // de ha itt akarod: form.resetForm();
+        this.closeModalById('newProjectModal'); 
+        this.newProject = this.initEmptyProject();
       },
-      error: (err) => console.error('Hiba létrehozáskor:', err)
+      error: (err) => console.error('Hiba történt:', err)
     });
+  }
+
+  closeModalById(modalId: string): void {
+    const element = document.getElementById(modalId);
+    if (element) {
+      const modal = bootstrap.Modal.getInstance(element);
+      
+      modal?.hide();
+    }
   }
 
   openNewProjectModal(): void {
