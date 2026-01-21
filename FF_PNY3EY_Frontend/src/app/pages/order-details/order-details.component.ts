@@ -47,6 +47,21 @@ export class OrderDetailsComponent {
     });
   }
 
+  createProject(form: NgForm): void {
+    if (form.invalid || !this.orderId) return;
+
+    // Megjegyzés: A service hívásnál megtartottam a paramétereket, ahogy írtad
+    this.orderService.createProject(this.newProject, this.newProject.packageDemand).subscribe({
+      next: () => {
+        this.loadProjects();
+        this.hideModal('newProjectModal');
+        // A form resetelését rábízhatjuk az újranyitáskori initEmptyProject-re, 
+        // de ha itt akarod: form.resetForm();
+      },
+      error: (err) => console.error('Hiba létrehozáskor:', err)
+    });
+  }
+
   openNewProjectModal(): void {
     this.newProject = this.initEmptyProject(); 
     this.showModal('newProjectModal');
