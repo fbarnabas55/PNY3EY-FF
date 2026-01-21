@@ -64,18 +64,22 @@ export class OrderDetailsComponent {
     });
   }
 
-  closeModalById(modalId: string): void {
-    const element = document.getElementById(modalId);
-    if (element) {
-      const modal = bootstrap.Modal.getInstance(element);
-      
-      modal?.hide();
-    }
-  }
+  saveProject(): void {
+    if (!this.selectedProject) return;
 
-  openNewProjectModal(): void {
-    this.newProject = this.initEmptyProject(); 
-    this.showModal('newProjectModal');
+    if (!this.selectedProject.projectName || !this.selectedProject.projectManager || this.selectedProject.price <= 0) {
+      alert('Hiba: Kérlek töltsd ki a kötelező mezőket!');
+      return;
+    }
+
+    this.orderService.updateProject(this.selectedProject, this.selectedProject.packageDemand).subscribe({
+      next: () => {
+        this.loadProjects();
+        this.closeModalById('projectModal');
+        this.selectedProject = null;
+      },
+      error: (err) => console.error('Hiba a mentéskor:', err)
+    });
   }
 
   openEditModal(project: Project): void {
@@ -91,7 +95,14 @@ export class OrderDetailsComponent {
     }
   }
 
-  
+  closeModalById(modalId: string): void {
+    const element = document.getElementById(modalId);
+    if (element) {
+      const modal = bootstrap.Modal.getInstance(element);
+      
+      modal?.hide();
+    }
+  }
 
   private initEmptyProject(): Project {
     return {
