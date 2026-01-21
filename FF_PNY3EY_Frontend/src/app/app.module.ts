@@ -7,12 +7,14 @@ import { OrderListComponent } from './pages/order-list/order-list.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { OrderEditorComponent } from './pages/order-editor/order-editor.component';
+import { NavListComponent } from './nav-list/nav-list.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrderListComponent,
-    OrderEditorComponent
+    OrderEditorComponent,
+    NavListComponent
   ],
   imports: [
     BrowserModule,
