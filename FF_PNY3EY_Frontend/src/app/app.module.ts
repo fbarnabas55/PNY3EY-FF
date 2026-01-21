@@ -8,13 +8,15 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { OrderEditorComponent } from './pages/order-editor/order-editor.component';
 import { NavListComponent } from './nav-list/nav-list.component';
+import { OrderDetailsComponent } from './pages/order-details/order-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrderListComponent,
     OrderEditorComponent,
-    NavListComponent
+    NavListComponent,
+    OrderDetailsComponent
   ],
   imports: [
     BrowserModule,

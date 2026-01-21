@@ -1,0 +1,35 @@
+<div>
+    <h2 class="mb-4">{{ orderName }}</h2>
+    <div class="row">
+
+        <div class="col-md-6">
+        <h4>Projektek</h4>
+
+        <div *ngFor="let project of projects" class="card mb-3">
+            <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start">
+                <h5 class="card-title mb-1">{{ project.projectName }}</h5>
+                <span class="fw-bold">{{ project.price }} Ft</span>
+            </div>
+            <p class="card-text">{{ project.description }}</p>
+            <p class="card-text"><strong>Projektmenedzser:</strong> {{ project.projectManager }}</p>
+            <span class="badge bg-secondary">{{ project.packageDemand }}</span>
+
+            <div class="mt-2">
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="openEditModal(project)">
+                <i class="bi bi-pencil"></i> Szerkesztés
+                </button>
+                <button class="btn btn-sm btn-outline-danger" (click)="confirmDelete(project)">
+                <i class="bi bi-trash"></i> Törlés
+                </button>
+            </div>
+            </div>
+        </div>
+
+        <div class="card mb-3 text-muted text-center border-dashed" (click)="openNewProjectModal()">
+            <div class="card-body">
+            <i class="bi bi-plus-circle"></i> Új projekt hozzáadása
+            </div>
+        </div>
+        </div>
+    </div>
