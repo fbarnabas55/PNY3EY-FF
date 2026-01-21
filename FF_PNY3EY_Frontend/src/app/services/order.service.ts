@@ -48,6 +48,27 @@ export class OrderService {
     const params = { packageDemand };
     return this.http.put<void>(`${this.baseUrl}/Project/${project.id}`, project, { params });
   }
+
+  getSignDesigns(orderId: string): Observable<SignDesign[]> {
+    return this.http.get<SignDesign[]>(`${this.baseUrl}/SignDesign/order/${orderId}`);
+  }
+
+  createSignDesign(design: SignDesign): Observable<SignDesign> {
+    const params = {
+      lightings: design.lightings,
+      brightness: design.brightness,
+      material: design.material
+    };
+    return this.http.post<SignDesign>(`${this.baseUrl}/SignDesign`, design, { params });
+  }
+
+  updateSignDesign(design: SignDesign): Observable<void> {
+    return this.http.put<void>(`${this.baseUrl}/SignDesign/${design.id}`, design);
+  }
+
+  deleteSignDesign(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/SignDesign/${id}`);
+  }
 }
 
   export interface Order {
