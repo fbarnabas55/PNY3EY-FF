@@ -46,6 +46,16 @@ export class OrderDetailsComponent {
     });
   }
 
+  openNewProjectModal(): void {
+    this.newProject = this.initEmptyProject(); 
+    this.showModal('newProjectModal');
+  }
+
+  openEditModal(project: Project): void {
+    this.selectedProject = { ...project };
+    this.showModal('projectModal');
+  }
+
   private initEmptyProject(): Project {
     return {
       orderId: this.orderId || '',
@@ -55,6 +65,17 @@ export class OrderDetailsComponent {
       price: 0,
       packageDemand: 'Foiled'
     };
+  }
+
+  private showModal(modalId: string): void {
+    const modalEl = document.getElementById(modalId);
+    if (modalEl) {
+      let modal = Modal.getInstance(modalEl);
+      if (!modal) {
+        modal = new Modal(modalEl);
+      }
+      modal.show();
+    }
   }
 
 }
