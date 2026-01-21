@@ -33,6 +33,36 @@
         </div>
         </div>
     </div>
+
+    <div *ngFor="let design of signDesigns" class="card mb-3">
+        <div class="card-body">
+          <h5 class="card-title mb-1">{{ design.description }}</h5>
+          <p class="card-text">Dekor: {{ design.decor }}</p>
+          <p class="card-text">Rögzítés: {{ design.fixing }}</p>
+          <p class="card-text">Méret: {{ design.width }} x {{ design.height }} cm</p>
+
+          <div class="mt-2">
+            <span class="badge bg-info me-1">{{ design.material }}</span>
+            <span class="badge bg-warning text-dark me-1">{{ design.brightness }}</span>
+            <span class="badge bg-secondary">{{ design.lightings }}</span>
+          </div>
+
+          <div class="mt-3">
+            <button class="btn btn-sm btn-outline-primary me-2" (click)="openEditDesignModal(design)">
+              <i class="bi bi-pencil"></i> Szerkesztés
+            </button>
+            <button class="btn btn-sm btn-outline-danger" (click)="confirmDeleteDesign(design)">
+              <i class="bi bi-trash"></i> Törlés
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card mb-3 text-muted text-center border-dashed" (click)="openNewDesignModal()">
+        <div class="card-body">
+          <i class="bi bi-plus-circle"></i> Új design hozzáadása
+        </div>
+      </div>
 </div>
 
 <div class="modal fade" id="newProjectModal" tabindex="-1">
