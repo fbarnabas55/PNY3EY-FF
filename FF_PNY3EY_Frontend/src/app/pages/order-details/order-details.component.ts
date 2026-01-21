@@ -108,6 +108,24 @@ export class OrderDetailsComponent {
     });
   }
 
+  saveDesign(): void {
+    if (!this.selectedDesign) return;
+
+    if (!this.selectedDesign.description || this.selectedDesign.width <= 0 || this.selectedDesign.height <= 0) {
+      alert('Hiba: Hiányzó adatok!');
+      return;
+    }
+
+    this.orderService.updateSignDesign(this.selectedDesign).subscribe({
+      next: () => {
+        this.loadDesigns();
+        this.closeModalById('editDesignModal');
+        this.selectedDesign = null;
+      },
+      error: (err) => console.error('Hiba design mentésekor:', err)
+    });
+  }
+
   openEditModal(project: Project): void {
     this.selectedProject = { ...project };
     this.showModal('projectModal');
@@ -129,6 +147,14 @@ export class OrderDetailsComponent {
   openEditDesignModal(design: SignDesign): void {
     this.selectedDesign = { ...design };
     this.showModal('editDesignModal');
+  }
+
+  confirmDeleteDesign(design: SignDesign): void {
+    if (confirm(`Biztosan törlöd a "${design.description}" designt?`)) {
+      if (design.id) {
+        this.orderService.deleteSignDesign(design.id).subscribe(() => this.loadDesigns());
+      }
+    }
   }
 
   openNewProjectModal(): void {
