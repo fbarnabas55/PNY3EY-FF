@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OrderService, Project } from '../../services/order.service';
+import { OrderService, Project, SignDesign } from '../../services/order.service';
 import { ActivatedRoute } from '@angular/router';
 import * as bootstrap from 'bootstrap';
 @Component({
@@ -16,6 +16,10 @@ export class OrderDetailsComponent {
   selectedProject: Project | null = null;
   newProject: Project = this.initEmptyProject();
 
+  signDesigns: SignDesign[] = [];
+  selectedDesign: SignDesign | null = null;
+  newDesign: SignDesign = this.initEmptyDesign();
+
   constructor(private route: ActivatedRoute, private orderService: OrderService) {
     this.orderId = this.route.snapshot.paramMap.get('id');
     
@@ -28,6 +32,7 @@ export class OrderDetailsComponent {
     if (!this.orderId) return;
     this.loadOrder();
     this.loadProjects();
+    this.loadDesigns();
   }
 
   loadOrder(): void {
@@ -35,6 +40,13 @@ export class OrderDetailsComponent {
     this.orderService.getOrderById(this.orderId).subscribe({
       next: (order) => this.orderName = order.orderName,
       error: (err) => console.error('Hiba a rendelés betöltésekor:', err)
+    });
+  }
+  loadDesigns(): void {
+    if (!this.orderId) return;
+    this.orderService.getSignDesigns(this.orderId).subscribe({
+      next: (data) => this.signDesigns = data,
+      error: (err) => console.error('Hiba a designok betöltésekor:', err)
     });
   }
 
@@ -137,16 +149,5 @@ export class OrderDetailsComponent {
       modal.show();
     }
   }
-
-  private hideModal(modalId: string): void {
-    const modalEl = document.getElementById(modalId);
-    if (modalEl) {
-      const modal = bootstrap.Modal.getInstance(modalEl);
-      modal?.hide();
-    }
-  }
-
-  
-
 }
   
