@@ -131,13 +131,6 @@ export class OrderDetailsComponent {
     this.showModal('projectModal');
   }
 
-  confirmDelete(project: Project): void {
-    if (confirm(`Biztosan törölni szeretnéd a(z) "${project.projectName}" projektet?`)) {
-      if (project.id) {
-        this.orderService.deleteProject(project.id).subscribe(() => this.loadProjects());
-      }
-    }
-  }
 
   openNewDesignModal(): void {
     this.newDesign = this.initEmptyDesign();
@@ -149,6 +142,19 @@ export class OrderDetailsComponent {
     this.showModal('editDesignModal');
   }
 
+  openNewProjectModal(): void {
+    this.newProject = this.initEmptyProject(); 
+    this.showModal('newProjectModal');
+  }
+
+  confirmDelete(project: Project): void {
+    if (confirm(`Biztosan törölni szeretnéd a(z) "${project.projectName}" projektet?`)) {
+      if (project.id) {
+        this.orderService.deleteProject(project.id).subscribe(() => this.loadProjects());
+      }
+    }
+  }
+
   confirmDeleteDesign(design: SignDesign): void {
     if (confirm(`Biztosan törlöd a "${design.description}" designt?`)) {
       if (design.id) {
@@ -157,10 +163,7 @@ export class OrderDetailsComponent {
     }
   }
 
-  openNewProjectModal(): void {
-    this.newProject = this.initEmptyProject(); 
-    this.showModal('newProjectModal');
-  }
+  
 
   closeModalById(modalId: string): void {
     const element = document.getElementById(modalId);

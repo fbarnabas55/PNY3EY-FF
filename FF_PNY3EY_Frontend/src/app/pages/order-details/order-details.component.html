@@ -1,6 +1,8 @@
 <div class="container py-4">
   <h2 class="mb-4">{{ orderName }}</h2>
+  
   <div class="row">
+    
     <div class="col-md-6">
       <h4>Projektek</h4>
 
@@ -30,9 +32,8 @@
           <i class="bi bi-plus-circle"></i> Új projekt hozzáadása
         </div>
       </div>
-    </div>
-
-    
+    </div> <div class="col-md-6">
+      <h4>Sign Design</h4>
 
       <div *ngFor="let design of signDesigns" class="card mb-3">
         <div class="card-body">
@@ -63,7 +64,8 @@
           <i class="bi bi-plus-circle"></i> Új design hozzáadása
         </div>
       </div>
-  </div>
+    </div> 
+  </div> 
 </div>
 
 <div class="modal fade" id="newProjectModal" tabindex="-1">
@@ -121,7 +123,6 @@
 <div class="modal fade" id="projectModal" tabindex="-1">
   <div class="modal-dialog">
     <div class="modal-content">
-      
       <div class="modal-header">
         <h5 class="modal-title">Projekt szerkesztése</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
