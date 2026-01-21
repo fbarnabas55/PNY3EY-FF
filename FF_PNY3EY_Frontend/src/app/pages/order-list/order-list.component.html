@@ -1,1 +1,55 @@
-<p>order-list works!</p>
+<div class="container py-4">
+  <h1 class="mb-4">Rendelések</h1>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <button class="btn btn-primary" routerLink="/orders/new">
+      + Új rendelés
+    </button>
+    <div class="search-bar position-relative">
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        placeholder="Rendelés neve"
+        class="form-control rounded-pill ps-5"
+      />
+      <i class="bi bi-search search-icon position-absolute"></i>
+    </div>
+  </div>
+
+  <div class="table-responsive shadow rounded overflow-hidden border">
+    <table 
+      class="table table-bordered table-hover table-striped table-sm align-middle text-center custom-table mb-0 rounded"
+      [ngClass]="isDark ? 'table-dark' : 'table-light'">
+      <thead class="align-middle">
+        <tr>
+          <th class="text-uppercase">Rendelés neve</th>
+          <th class="text-uppercase"><i class="bi bi-geo-alt-fill me-1"></i>Telepítési cím</th>
+          <th class="text-uppercase"><i class="bi bi-envelope-fill me-1"></i>Ügyfél Email</th>
+          <th class="text-uppercase"><i class="bi bi-telephone-fill me-1"></i>Telefon</th>
+          <th class="text-uppercase"><i class="bi bi-calendar-event-fill me-1"></i> Határidő</th>
+          <th class="text-uppercase">Műveletek</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of filteredOrders()">
+          <td>{{ order.orderName }}</td>
+          <td>{{ order.installationAdress }}</td>
+          <td>{{ order.email }}</td>
+          <td>{{ order.phoneNumber }}</td>
+          <td [ngClass]="{'text-danger fw-bold': isExpiringSoon(order.deadline)}">
+            {{ order.deadline | date: 'shortDate' }}
+          </td>
+          <td>
+            <button class="btn btn-sm btn-primary me-2" [routerLink]="['/orders', order.id, 'details']">
+              <i class="bi bi-three-dots"></i></button>
+            <button class="btn btn-sm btn-warning me-2" [routerLink]="['/orders/edit', order.id]">
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteOrder(order.id)">
+              <i class="bi bi-trash-fill"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
