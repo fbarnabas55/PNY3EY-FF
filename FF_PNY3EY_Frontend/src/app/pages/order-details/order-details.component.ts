@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 import { OrderService, Project } from '../../services/order.service';
 import { ActivatedRoute } from '@angular/router';
-declare var bootstrap: any;
-
+import * as bootstrap from 'bootstrap';
 @Component({
   selector: 'app-order-details',
   standalone: false,
