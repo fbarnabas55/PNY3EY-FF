@@ -238,3 +238,71 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="editDesignModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Design szerkesztése</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedDesign">
+        <div class="mb-3">
+          <label>Leírás / Név</label>
+          <input [(ngModel)]="selectedDesign.description" class="form-control" />
+        </div>
+        <div class="row">
+          <div class="col-6 mb-3">
+            <label>Dekor</label>
+            <input [(ngModel)]="selectedDesign.decor" class="form-control" />
+          </div>
+          <div class="col-6 mb-3">
+            <label>Rögzítés</label>
+            <input [(ngModel)]="selectedDesign.fixing" class="form-control" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6 mb-3">
+            <label>Szélesség (cm)</label>
+            <input type="number" [(ngModel)]="selectedDesign.width" class="form-control" />
+          </div>
+          <div class="col-6 mb-3">
+            <label>Magasság (cm)</label>
+            <input type="number" [(ngModel)]="selectedDesign.height" class="form-control" />
+          </div>
+        </div>
+        <div class="mb-3">
+          <label>Anyag</label>
+          <select [(ngModel)]="selectedDesign.material" class="form-select">
+            <option value="Steel">Fém (Steel)</option>
+            <option value="Aluminium">Alumínium</option>
+            <option value="StainlessSteel">Rozsdamentes acél</option>
+            <option value="Plastic">Műanyag</option>
+          </select>
+        </div>
+        <div class="row">
+          <div class="col-6 mb-3">
+            <label>Fényerő</label>
+            <select [(ngModel)]="selectedDesign.brightness" class="form-select">
+              <option value="Low">Alacsony</option>
+              <option value="Medium">Közepes</option>
+              <option value="High">Erős</option>
+            </select>
+          </div>
+          <div class="col-6 mb-3">
+            <label>Világítás</label>
+            <select [(ngModel)]="selectedDesign.lightings" class="form-select">
+              <option value="LED">LED</option>
+              <option value="Neon">Neon</option>
+              <option value="Halogen">Halogén</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+        <button type="button" class="btn btn-primary" (click)="saveDesign()">Mentés</button>
+      </div>
+    </div>
+  </div>
+</div>
