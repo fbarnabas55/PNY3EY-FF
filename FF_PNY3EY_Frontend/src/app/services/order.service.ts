@@ -40,7 +40,7 @@ export class OrderService {
   phoneNumber: string;
   email: string;
   deadline: string;     
-  startDate: string;
+  startDate?: string;
   projects?: Project[];     
   designs?: any[];
   }

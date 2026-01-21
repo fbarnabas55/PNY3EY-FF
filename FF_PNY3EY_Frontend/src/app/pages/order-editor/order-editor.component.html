@@ -1,0 +1,102 @@
+<div class="container py-4">
+  <form #userForm="ngForm" (ngSubmit)="onSubmit()" class="glass-editor p-4">
+    <h3>Új rendelés</h3>
+
+    <div class="mb-3">
+      <label for="id">Rendelés azonosító</label>
+      <input 
+        type="text"
+        id="id" 
+        name="id" 
+        [(ngModel)]="order.id" 
+        #idModel="ngModel"
+        required
+        class="form-control" 
+        [ngClass]="{'is-invalid': idModel.invalid && idModel.touched}" 
+      />
+      <div *ngIf="idModel.invalid && idModel.touched" class="invalid-feedback">
+        Az azonosító megadása kötelező.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label for="orderName">Rendelés neve</label>
+      <input 
+        type="text"
+        id="orderName" 
+        name="orderName" 
+        [(ngModel)]="order.orderName" 
+        #nameModel="ngModel"
+        required
+        class="form-control" 
+        [ngClass]="{'is-invalid': nameModel.invalid && nameModel.touched}" 
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="installationAdress">Telepítési cím</label>
+      <input 
+        type="text"
+        id="installationAdress" 
+        name="installationAdress" 
+        [(ngModel)]="order.installationAdress" 
+        #addressModel="ngModel"
+        required
+        class="form-control" 
+        [ngClass]="{'is-invalid': addressModel.invalid && addressModel.touched}" 
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="phoneNumber">Telefonszám</label>
+      <input 
+        type="text"
+        id="phoneNumber" 
+        name="phoneNumber" 
+        [(ngModel)]="order.phoneNumber" 
+        #phoneModel="ngModel"
+        required
+        class="form-control" 
+        [ngClass]="{'is-invalid': phoneModel.invalid && phoneModel.touched}" 
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="email">Email</label>
+      <input 
+        id="email" 
+        type="email" 
+        name="email" 
+        [(ngModel)]="order.email" 
+        #emailModel="ngModel"
+        required
+        email
+        class="form-control" 
+        [ngClass]="{'is-invalid': emailModel.invalid && emailModel.touched}" 
+      />
+      </div>
+
+    <div class="mb-3">
+      <label for="deadline">Határidő</label>
+      <input 
+        id="deadline" 
+        type="datetime-local" 
+        name="deadline" 
+        [(ngModel)]="order.deadline" 
+        #deadlineModel="ngModel"
+        required
+        class="form-control" 
+        [ngClass]="{'is-invalid': deadlineModel.invalid && deadlineModel.touched}" 
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3" [disabled]="userForm.invalid">Mentés</button>
+  </form>
+</div>
+
+<style>
+  .is-invalid {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+  }
+</style>

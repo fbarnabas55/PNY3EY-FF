@@ -6,11 +6,13 @@ import { AppComponent } from './app.component';
 import { OrderListComponent } from './pages/order-list/order-list.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { OrderEditorComponent } from './pages/order-editor/order-editor.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    OrderListComponent
+    OrderListComponent,
+    OrderEditorComponent
   ],
   imports: [
     BrowserModule,
