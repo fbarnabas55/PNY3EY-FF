@@ -11,7 +11,6 @@ export class OrderService {
 
   constructor(private http: HttpClient) { }
 
-  // Order műveletek
   getOrders(): Observable<Order[]> {
     return this.http.get<Order[]>(`${this.baseUrl}/Order`);
   }
@@ -30,6 +29,24 @@ export class OrderService {
 
   deleteOrder(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/Order/${id}`);
+  }
+
+  getProjects(orderId: string): Observable<Project[]> {
+    return this.http.get<Project[]>(`${this.baseUrl}/Project/order/${orderId}`);
+  }
+
+  createProject(project: Project, packageDemand: string): Observable<Project> {
+    const params = { packageDemand };
+    return this.http.post<Project>(`${this.baseUrl}/Project`, project, { params });
+  }
+
+  deleteProject(projectId: string): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/Project/${projectId}`);
+  }
+
+  updateProject(project: Project, packageDemand: string): Observable<void> {
+    const params = { packageDemand };
+    return this.http.put<void>(`${this.baseUrl}/Project/${project.id}`, project, { params });
   }
 }
 
