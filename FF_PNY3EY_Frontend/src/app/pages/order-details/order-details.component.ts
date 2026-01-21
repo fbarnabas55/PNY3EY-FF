@@ -95,6 +95,11 @@ export class OrderDetailsComponent {
     }
   }
 
+  openNewProjectModal(): void {
+    this.newProject = this.initEmptyProject(); 
+    this.showModal('newProjectModal');
+  }
+
   closeModalById(modalId: string): void {
     const element = document.getElementById(modalId);
     if (element) {

@@ -86,3 +86,55 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="projectModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title">Projekt szerkesztése</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body" *ngIf="selectedProject">
+        
+        <div class="mb-3">
+          <label>Projekt neve</label>
+          <input [(ngModel)]="selectedProject.projectName" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+          <label>Leírás</label>
+          <textarea [(ngModel)]="selectedProject.description" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label>Projektmenedzser</label>
+          <input [(ngModel)]="selectedProject.projectManager" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+          <label>Ár (Ft)</label>
+          <input type="number" [(ngModel)]="selectedProject.price" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+          <label>Csomagolás típusa</label>
+          <select [(ngModel)]="selectedProject.packageDemand" class="form-select">
+            <option value="">Válassz csomagolást</option>
+            <option value="Foiled">Foiled</option>
+            <option value="Boxed">Boxed</option>
+            <option value="Stocked">Stocked</option>
+          </select>
+        </div>
+
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégse</button>
+        <button type="button" class="btn btn-primary" (click)="saveProject()">Mentés</button>
+      </div>
+
+    </div>
+  </div>
+</div>
