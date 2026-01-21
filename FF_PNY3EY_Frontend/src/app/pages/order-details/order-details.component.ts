@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { OrderService, Project } from '../../services/order.service';
 import { ActivatedRoute } from '@angular/router';
-import { Modal } from 'bootstrap';
 declare var bootstrap: any;
 
 @Component({
@@ -132,9 +131,9 @@ export class OrderDetailsComponent {
   private showModal(modalId: string): void {
     const modalEl = document.getElementById(modalId);
     if (modalEl) {
-      let modal = Modal.getInstance(modalEl);
+      let modal = bootstrap.Modal.getInstance(modalEl);
       if (!modal) {
-        modal = new Modal(modalEl);
+        modal = new bootstrap.Modal(modalEl);
       }
       modal.show();
     }
@@ -143,7 +142,7 @@ export class OrderDetailsComponent {
   private hideModal(modalId: string): void {
     const modalEl = document.getElementById(modalId);
     if (modalEl) {
-      const modal = Modal.getInstance(modalEl);
+      const modal = bootstrap.Modal.getInstance(modalEl);
       modal?.hide();
     }
   }
