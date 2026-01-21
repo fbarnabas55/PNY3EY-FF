@@ -13,7 +13,6 @@ export class OrderListComponent {
   isDark = false;
 
   constructor(private orderService: OrderService) {
-    // Az ngOnInit tartalma átkerült ide, a constructorba
     this.orderService.getOrders().subscribe(data => {
       this.orders = data;
     });
@@ -22,7 +21,6 @@ export class OrderListComponent {
   deleteOrder(id: string): void {
     if (confirm('Biztosan törlöd ezt a rendelést?')) {
       this.orderService.deleteOrder(id).subscribe(() => {
-        // A lokális tömb frissítése törlés után
         this.orders = this.orders.filter(o => o.id !== id);
       });
     }
