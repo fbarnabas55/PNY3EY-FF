@@ -92,6 +92,22 @@ export class OrderDetailsComponent {
     });
   }
 
+  createDesign(): void {
+    if (!this.newDesign.description || this.newDesign.width <= 0 || this.newDesign.height <= 0) {
+      alert('Hiba: Kérlek add meg a leírást és a méreteket!');
+      return;
+    }
+
+    this.orderService.createSignDesign(this.newDesign).subscribe({
+      next: () => {
+        this.loadDesigns();
+        this.closeModalById('newDesignModal');
+        this.newDesign = this.initEmptyDesign();
+      },
+      error: (err) => console.error('Hiba design létrehozáskor:', err)
+    });
+  }
+
   openEditModal(project: Project): void {
     this.selectedProject = { ...project };
     this.showModal('projectModal');
