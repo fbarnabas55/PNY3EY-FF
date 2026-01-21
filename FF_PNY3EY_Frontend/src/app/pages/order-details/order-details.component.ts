@@ -105,6 +105,16 @@ export class OrderDetailsComponent {
     }
   }
 
+  openNewDesignModal(): void {
+    this.newDesign = this.initEmptyDesign();
+    this.showModal('newDesignModal');
+  }
+
+  openEditDesignModal(design: SignDesign): void {
+    this.selectedDesign = { ...design };
+    this.showModal('editDesignModal');
+  }
+
   openNewProjectModal(): void {
     this.newProject = this.initEmptyProject(); 
     this.showModal('newProjectModal');
@@ -136,6 +146,20 @@ export class OrderDetailsComponent {
       projectManager: '',
       price: 0,
       packageDemand: 'Foiled'
+    };
+  }
+
+  private initEmptyDesign(): SignDesign {
+    return {
+      orderId: this.orderId || '',
+      description: '',
+      fixing: '',
+      decor: '',
+      width: 0,
+      height: 0,
+      material: 'Steel',
+      brightness: 'Medium',
+      lightings: 'LED'
     };
   }
 
