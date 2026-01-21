@@ -103,9 +103,18 @@ export class OrderDetailsComponent {
   closeModalById(modalId: string): void {
     const element = document.getElementById(modalId);
     if (element) {
-      const modal = bootstrap.Modal.getInstance(element);
-      
-      modal?.hide();
+
+      const modal = bootstrap.Modal.getOrCreateInstance(element);
+      modal.hide();
+
+      setTimeout(() => {
+        const backdrops = document.querySelectorAll('.modal-backdrop');
+        backdrops.forEach(backdrop => backdrop.remove());
+        
+        document.body.classList.remove('modal-open');
+        document.body.style.removeProperty('padding-right');
+        document.body.style.removeProperty('overflow');
+      }, 150);
     }
   }
 
