@@ -56,6 +56,16 @@ export class OrderDetailsComponent {
     this.showModal('projectModal');
   }
 
+  confirmDelete(project: Project): void {
+    if (confirm(`Biztosan törölni szeretnéd a(z) "${project.projectName}" projektet?`)) {
+      if (project.id) {
+        this.orderService.deleteProject(project.id).subscribe(() => this.loadProjects());
+      }
+    }
+  }
+
+  
+
   private initEmptyProject(): Project {
     return {
       orderId: this.orderId || '',
@@ -75,6 +85,14 @@ export class OrderDetailsComponent {
         modal = new Modal(modalEl);
       }
       modal.show();
+    }
+  }
+
+  private hideModal(modalId: string): void {
+    const modalEl = document.getElementById(modalId);
+    if (modalEl) {
+      const modal = Modal.getInstance(modalEl);
+      modal?.hide();
     }
   }
 
