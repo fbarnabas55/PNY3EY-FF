@@ -1,0 +1,6 @@
+@SignFactory_HostAddress = http://localhost:5239
+
+GET {{SignFactory_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
