@@ -115,4 +115,12 @@ export class StatisticsComponent {
       error: (err) => console.error('Hiba a projekt statisztika betöltésekor:', err)
     });
   }
+
+  formatCurrency(value: number): string {
+    return new Intl.NumberFormat('hu-HU', { 
+      style: 'currency', 
+      currency: 'HUF', 
+      maximumFractionDigits: 0 
+    }).format(value);
+  }
 }

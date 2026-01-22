@@ -27,8 +27,7 @@ import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    BaseChartDirective
-    
+    BaseChartDirective,
   ],
   providers: [
     provideCharts(withDefaultRegisterables())
