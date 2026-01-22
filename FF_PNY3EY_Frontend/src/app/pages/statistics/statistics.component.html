@@ -1,1 +1,31 @@
-<p>statistics works!</p>
+<div class="container py-4">
+  <h2 class="mb-4">Statisztikák</h2>
+
+  <div class="alert alert-info mb-4" *ngIf="maxOrder">
+    A hónap legnagyobb rendelése: <strong>{{ maxOrder.name }}</strong> – 
+    <strong>{{ maxOrder.amount | number }} Ft</strong>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card p-3" style="height: 400px; overflow: hidden;">
+        <h5 class="card-title">Rendelések száma havonta</h5>
+        <canvas baseChart
+          [data]="ordersPerMonthChartData"
+          [options]="ordersPerMonthChartOptions"
+          [type]="'bar'">
+        </canvas>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card p-3">
+        <h5 class="card-title">Projektek száma rendelésenként a hónapban</h5>
+        <canvas baseChart
+          [data]="projectCountChartData"
+          [type]="'doughnut'">
+        </canvas>
+      </div>
+    </div>
+  </div>
+</div>
