@@ -31,6 +31,9 @@ export class OrderService {
     return this.http.delete<void>(`${this.baseUrl}/Order/${id}`);
   }
 
+
+
+
   getProjects(orderId: string): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.baseUrl}/Project/order/${orderId}`);
   }
@@ -48,6 +51,9 @@ export class OrderService {
     const params = { packageDemand };
     return this.http.put<void>(`${this.baseUrl}/Project/${project.id}`, project, { params });
   }
+
+
+
 
   getSignDesigns(orderId: string): Observable<SignDesign[]> {
     return this.http.get<SignDesign[]>(`${this.baseUrl}/SignDesign/order/${orderId}`);
@@ -68,6 +74,21 @@ export class OrderService {
 
   deleteSignDesign(id: string): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/SignDesign/${id}`);
+  }
+
+
+
+
+  getMaxOrderThisMonth(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/Order/stats/max-order-current-month`);
+  }
+
+  getOrdersPerMonth(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}/Order/stats/orders-per-month`);
+  }
+
+  getProjectCountsPerOrderThisMonth(): Observable<any> {
+    return this.http.get(`${this.baseUrl}/Order/stats/project-counts-per-order`);
   }
 }
 
