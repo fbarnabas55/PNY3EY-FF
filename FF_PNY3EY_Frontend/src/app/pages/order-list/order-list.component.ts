@@ -36,14 +36,6 @@ export class OrderListComponent {
     );
   }
 
-  toggleTheme(): void {
-    this.isDark = !this.isDark;
-
-    const body = document.body;
-    body.classList.remove('dark-theme', 'light-theme');
-    body.classList.add(this.isDark ? 'dark-theme' : 'light-theme');
-  }
-
   isExpiringSoon(deadline: string | Date): boolean {
     const today = new Date();
     const dueDate = new Date(deadline);
