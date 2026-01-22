@@ -17,4 +17,21 @@ export class StatisticsComponent {
     datasets: []
   };
 
+  ordersPerMonthChartOptions: ChartOptions<'bar'> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1, 
+          precision: 0
+        }
+      }
+    },
+    plugins: {
+      legend: { display: false }
+    }
+  };
+
 }
