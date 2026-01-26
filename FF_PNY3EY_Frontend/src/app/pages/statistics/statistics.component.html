@@ -6,8 +6,8 @@
     <div>
       <div class="text-uppercase small fw-bold text-muted">A hónap legnagyobb rendelése</div>
       <div class="fs-5">
-        <strong>{{ orderService.maxOrder.orderName }}</strong> – 
-        <span class="text-primary fw-bold">{{ orderService.maxOrder.totalValue }}</span>
+        <strong>{{ orderService.maxOrder.orderName }} - </strong>
+        <span class="text-primary fw-bold">{{ orderService.maxOrder.totalValue }} Ft</span>
       </div>
     </div>
   </div>
@@ -21,20 +21,20 @@
         </div>
         <div class="card-body">
           
-          <div class="d-flex align-items-end justify-content-around h-100 pb-3" style="min-height: 250px;">
+          <div class="d-flex align-items-end justify-content-around" style="height: 300px;">
             
-            <div *ngFor="let item of orderService.ordersPerMonth" class="text-center w-100 px-1">
+            <div *ngFor="let item of orderService.ordersPerMonth" class="d-flex flex-column justify-content-end align-items-center h-100 w-100 px-1">
               
-              <div class="bg-primary rounded-top mx-auto position-relative custom-bar"
-                   [style.height.%]="(item.orderCount / getMaxOrderCount()) * 100"
-                   style="width: 40px; transition: height 0.5s ease;">
+              <div class="bg-primary rounded-top position-relative shadow-sm custom-bar"
+                   [style.height.%]="(item.orderCount / getMaxOrderCount()) * 85"
+                   style="width: 40px; transition: height 0.5s ease; min-height: 1px;">
                 
-                <span class="position-absolute top-0 start-50 translate-middle-x mt-2 text-white fw-bold small">
+                <div class="position-absolute top-0 start-50 translate-middle-x mt-1 text-white fw-bold small">
                   {{ item.orderCount }}
-                </span>
+                </div>
               </div>
               
-              <div class="mt-2 small fw-bold text-muted border-top pt-1">
+              <div class="mt-2 small fw-bold text-muted border-top pt-1 w-100 text-center">
                 {{ item.year }}.{{ item.month }}
               </div>
             </div>
@@ -57,19 +57,16 @@
         <div class="card-body overflow-auto" style="max-height: 350px;">
           
           <div *ngFor="let item of orderService.projectCounts" class="mb-3">
-            
             <div class="d-flex justify-content-between mb-1">
               <span class="fw-bold small">{{ item.orderName }}</span>
               <span class="badge bg-secondary">{{ item.projectCount }} db</span>
             </div>
-            
             <div class="progress" style="height: 20px;">
               <div class="progress-bar bg-success" 
                    role="progressbar" 
                    [style.width.%]="(item.projectCount / getMaxProjectCount()) * 100">
               </div>
             </div>
-
           </div>
 
            <div *ngIf="orderService.projectCounts.length === 0" class="text-center text-muted py-5">

@@ -13,16 +13,19 @@ export class StatisticsComponent {
     this.orderService.loadStats();
   }
 
-
   getMaxOrderCount(): number {
     const list = this.orderService.ordersPerMonth;
     if (!list || list.length === 0) return 1;
-    return Math.max(...list.map(d => d.orderCount));
+    
+    const max = Math.max(...list.map(d => d.orderCount));
+    return max === 0 ? 1 : max;
   }
 
   getMaxProjectCount(): number {
     const list = this.orderService.projectCounts;
     if (!list || list.length === 0) return 1;
-    return Math.max(...list.map((d: any) => d.projectCount));
+    
+    const max = Math.max(...list.map((d: any) => d.projectCount));
+    return max === 0 ? 1 : max;
   }
 }

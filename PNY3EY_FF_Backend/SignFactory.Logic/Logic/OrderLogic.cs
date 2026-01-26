@@ -116,7 +116,7 @@ namespace SignFactory.Logic.Logic
             DateTime startOfMonth = new DateTime(now.Year, now.Month, 1);
             DateTime nextMonth = startOfMonth.AddMonths(1);
 
-            var results = await _context.Designs
+            var results = await _context.Projects
                 .Where(d => d.Order != null && d.Order.StartDate >= startOfMonth && d.Order.StartDate < nextMonth)
                 .GroupBy(d => new { d.OrderId, d.Order.OrderName })
                 .Select(g => new ProjectCountPerOrderDto
