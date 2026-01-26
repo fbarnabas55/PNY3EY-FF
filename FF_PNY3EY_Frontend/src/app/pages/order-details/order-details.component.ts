@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { OrderService, Project, SignDesign } from '../../services/order.service';
+import { OrderService} from '../../services/order.service';
 import { ActivatedRoute } from '@angular/router';
 import * as bootstrap from 'bootstrap';
+import { Project } from '../../models/project';
+import { Design } from '../../models/design';
 @Component({
   selector: 'app-order-details',
   standalone: false,
@@ -10,134 +12,151 @@ import * as bootstrap from 'bootstrap';
 })
 export class OrderDetailsComponent {
   orderId: string | null = null;
-  orderName = '';
-  
-  projects: Project[] = [];
+
   selectedProject: Project | null = null;
-  newProject: Project = this.initEmptyProject();
+  newProject: Project; 
 
-  signDesigns: SignDesign[] = [];
-  selectedDesign: SignDesign | null = null;
-  newDesign: SignDesign = this.initEmptyDesign();
+  selectedDesign: Design | null = null;
+  newDesign: Design;
 
-  constructor(private route: ActivatedRoute, private orderService: OrderService) {
+  constructor(private route: ActivatedRoute, public orderService: OrderService) {
     this.orderId = this.route.snapshot.paramMap.get('id');
     
+    this.newProject = this.initEmptyProject();
+    this.newDesign = this.initEmptyDesign();
+
     if (this.orderId) {
-      this.loadAllData();
+      this.orderService.loadOrderById(this.orderId);
+      this.orderService.loadProjects(this.orderId);
+      this.orderService.loadDesigns(this.orderId);
     }
   }
 
-  loadAllData(): void {
-    if (!this.orderId) return;
-    this.loadOrder();
-    this.loadProjects();
-    this.loadDesigns();
-  }
-
-  loadOrder(): void {
-    if (!this.orderId) return;
-    this.orderService.getOrderById(this.orderId).subscribe({
-      next: (order) => this.orderName = order.orderName,
-      error: (err) => console.error('Hiba a rendelés betöltésekor:', err)
-    });
-  }
-  loadDesigns(): void {
-    if (!this.orderId) return;
-    this.orderService.getSignDesigns(this.orderId).subscribe({
-      next: (data) => this.signDesigns = data,
-      error: (err) => console.error('Hiba a designok betöltésekor:', err)
-    });
-  }
-
-  loadProjects(): void {
-    if (!this.orderId) return;
-    this.orderService.getProjects(this.orderId).subscribe({
-      next: (data) => this.projects = data,
-      error: (err) => console.error('Hiba a projektek betöltésekor:', err)
-    });
-  }
 
   createProject(): void {
-    if (!this.newProject.projectName || !this.newProject.projectManager || this.newProject.price <= 0) {
-      alert('Hiba: Kérlek töltsd ki a kötelező mezőket (Név, Menedzser, Ár)!');
+    if (!this.isProjectValid(this.newProject)) {
       return;
     }
 
-    this.orderService.createProject(this.newProject, this.newProject.packageDemand).subscribe({
-      next: () => {
-        this.loadProjects();
-        this.closeModalById('newProjectModal'); 
-        this.newProject = this.initEmptyProject();
-      },
-      error: (err) => console.error('Hiba történt:', err)
+    this.orderService.createProject(this.newProject, this.newProject.packageDemand, () => {
+      this.closeModalById('newProjectModal');
+      this.newProject = this.initEmptyProject();
     });
   }
 
   saveProject(): void {
     if (!this.selectedProject) return;
 
-    if (!this.selectedProject.projectName || !this.selectedProject.projectManager || this.selectedProject.price <= 0) {
-      alert('Hiba: Kérlek töltsd ki a kötelező mezőket!');
-      return;
+    if (!this.isProjectValid(this.selectedProject)) {
+       return;
     }
 
-    this.orderService.updateProject(this.selectedProject, this.selectedProject.packageDemand).subscribe({
-      next: () => {
-        this.loadProjects();
-        this.closeModalById('projectModal');
-        this.selectedProject = null;
-      },
-      error: (err) => console.error('Hiba a mentéskor:', err)
+    this.orderService.updateProject(this.selectedProject, this.selectedProject.packageDemand, () => {
+      this.closeModalById('projectModal');
+      this.selectedProject = null;
     });
   }
 
+  deleteProject(project: Project): void {
+    if (confirm(`Biztosan törlöd a(z) "${project.projectName}" projektet?`)) {
+      if (project.id) {
+        this.orderService.deleteProject(project.id);
+      }
+    }
+  }
+
+
+
+
   createDesign(): void {
-    if (!this.newDesign.description || this.newDesign.width <= 0 || this.newDesign.height <= 0) {
-      alert('Hiba: Kérlek add meg a leírást és a méreteket!');
+    if (!this.isDesignValid(this.newDesign)) {
       return;
     }
 
-    this.orderService.createSignDesign(this.newDesign).subscribe({
-      next: () => {
-        this.loadDesigns();
-        this.closeModalById('newDesignModal');
-        this.newDesign = this.initEmptyDesign();
-      },
-      error: (err) => console.error('Hiba design létrehozáskor:', err)
+    this.orderService.createDesign(this.newDesign, () => {
+       this.closeModalById('newDesignModal');
+       this.newDesign = this.initEmptyDesign();
     });
   }
 
   saveDesign(): void {
     if (!this.selectedDesign) return;
 
-    if (!this.selectedDesign.description || this.selectedDesign.width <= 0 || this.selectedDesign.height <= 0) {
-      alert('Hiba: Hiányzó adatok!');
-      return;
+    if (!this.isDesignValid(this.selectedDesign)) {
+       return;
     }
 
-    this.orderService.updateSignDesign(this.selectedDesign).subscribe({
-      next: () => {
-        this.loadDesigns();
-        this.closeModalById('editDesignModal');
-        this.selectedDesign = null;
-      },
-      error: (err) => console.error('Hiba design mentésekor:', err)
+    this.orderService.updateDesign(this.selectedDesign, () => {
+       this.closeModalById('editDesignModal');
+       this.selectedDesign = null;
     });
   }
+
+  deleteDesign(design: Design): void {
+    if (confirm(`Biztosan törlöd a "${design.description}" designt?`)) {
+      if (design.id) {
+        this.orderService.deleteDesign(design.id);
+      }
+    }
+  }
+
+
+  private isProjectValid(p: Project): boolean {
+    if (!p.projectName || p.projectName.trim() === '') {
+      alert('Hiba: A projekt neve kötelező!');
+      return false;
+    }
+    if (!p.description || p.description.trim() === '') {
+      alert('Hiba: A leírás megadása kötelező!');
+      return false;
+    }
+    if (!p.projectManager || p.projectManager.trim() === '') {
+      alert('Hiba: A projektmenedzser megadása kötelező!');
+      return false;
+    }
+    if (p.price <= 0) {
+      alert('Hiba: Az árnak nagyobbnak kell lennie nullánál!');
+      return false;
+    }
+    return true;
+  }
+
+  private isDesignValid(d: Design): boolean {
+    if (!d.description || d.description.trim() === '') {
+      alert('Hiba: A leírás/név megadása kötelező!');
+      return false;
+    }
+    if (!d.decor || d.decor.trim() === '') {
+      alert('Hiba: A dekor megadása kötelező!');
+      return false;
+    }
+    if (!d.fixing || d.fixing.trim() === '') {
+      alert('Hiba: A rögzítés módjának megadása kötelező!');
+      return false;
+    }
+    if (d.width <= 0) {
+      alert('Hiba: A szélességnek nagyobbnak kell lennie nullánál!');
+      return false;
+    }
+    if (d.height <= 0) {
+      alert('Hiba: A magasságnak nagyobbnak kell lennie nullánál!');
+      return false;
+    }
+    return true;
+  }
+
 
   openEditModal(project: Project): void {
     this.selectedProject = { ...project };
     this.showModal('projectModal');
   }
 
-
   openNewDesignModal(): void {
     this.newDesign = this.initEmptyDesign();
     this.showModal('newDesignModal');
   }
 
-  openEditDesignModal(design: SignDesign): void {
+  openEditDesignModal(design: Design): void {
     this.selectedDesign = { ...design };
     this.showModal('editDesignModal');
   }
@@ -147,41 +166,38 @@ export class OrderDetailsComponent {
     this.showModal('newProjectModal');
   }
 
-  confirmDelete(project: Project): void {
-    if (confirm(`Biztosan törölni szeretnéd a(z) "${project.projectName}" projektet?`)) {
-      if (project.id) {
-        this.orderService.deleteProject(project.id).subscribe(() => this.loadProjects());
-      }
-    }
-  }
-
-  confirmDeleteDesign(design: SignDesign): void {
-    if (confirm(`Biztosan törlöd a "${design.description}" designt?`)) {
-      if (design.id) {
-        this.orderService.deleteSignDesign(design.id).subscribe(() => this.loadDesigns());
-      }
-    }
-  }
-
-  
-
   closeModalById(modalId: string): void {
     const element = document.getElementById(modalId);
     if (element) {
-
       const modal = bootstrap.Modal.getOrCreateInstance(element);
       modal.hide();
-
-      setTimeout(() => {
-        const backdrops = document.querySelectorAll('.modal-backdrop');
-        backdrops.forEach(backdrop => backdrop.remove());
-        
-        document.body.classList.remove('modal-open');
-        document.body.style.removeProperty('padding-right');
-        document.body.style.removeProperty('overflow');
-      }, 150);
+      this.cleanupBackdrop();
     }
   }
+
+
+  private showModal(modalId: string): void {
+    const modalEl = document.getElementById(modalId);
+    if (modalEl) {
+      const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+      modal.show();
+    }
+  }
+
+  private cleanupBackdrop(): void {
+    setTimeout(() => {
+      const backdrops = document.querySelectorAll('.modal-backdrop');
+      backdrops.forEach(backdrop => backdrop.remove());
+      document.body.classList.remove('modal-open');
+      document.body.style.removeProperty('padding-right');
+      document.body.style.removeProperty('overflow');
+    }, 150);
+  }
+
+
+
+
+
 
   private initEmptyProject(): Project {
     return {
@@ -194,7 +210,7 @@ export class OrderDetailsComponent {
     };
   }
 
-  private initEmptyDesign(): SignDesign {
+  private initEmptyDesign(): Design {
     return {
       orderId: this.orderId || '',
       description: '',
@@ -206,17 +222,6 @@ export class OrderDetailsComponent {
       brightness: 'Medium',
       lightings: 'LED'
     };
-  }
-
-  private showModal(modalId: string): void {
-    const modalEl = document.getElementById(modalId);
-    if (modalEl) {
-      let modal = bootstrap.Modal.getInstance(modalEl);
-      if (!modal) {
-        modal = new bootstrap.Modal(modalEl);
-      }
-      modal.show();
-    }
   }
 }
   

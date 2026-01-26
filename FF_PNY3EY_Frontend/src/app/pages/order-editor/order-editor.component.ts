@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Order, OrderService } from '../../services/order.service';
+import { OrderService } from '../../services/order.service';
+import { Order } from '../../models/order';
 
 @Component({
   selector: 'app-order-editor',
@@ -10,54 +11,49 @@ import { Order, OrderService } from '../../services/order.service';
 })
 export class OrderEditorComponent {
 
-  order: Order = {
-    id: '',
-    orderName: '',
-    installationAdress: '',
-    phoneNumber: '',
-    email: '',
-    deadline: ''
-  };
+  order: Order = new Order();
+  id: string | null = null;
 
-  orderIdToEdit: string | null = null;
-
-  constructor(
-    private orderService: OrderService, private router: Router, private route: ActivatedRoute
-  ) {
-    this.orderIdToEdit = this.route.snapshot.paramMap.get('id');
-
-    if (this.orderIdToEdit) {
-      this.orderService.getOrderById(this.orderIdToEdit).subscribe({
-        next: (data) => {
-          this.order = data;
-        },
-        error: (err) => {
-          console.error('Hiba a betöltéskor:', err);
-        }
-      });
+  constructor(private router: Router, private route: ActivatedRoute, public orderService: OrderService) {
+    this.id = this.route.snapshot.paramMap.get('id');
+    if (this.id) {
+      this.orderService.loadOrderById(this.id);
     }
   }
 
-  onSubmit(): void {
+  save(): void {
+    let dataToSave: Order;
 
-    if (!this.orderIdToEdit) {
-      this.orderService.createOrder(this.order).subscribe({
-        next: () => {
-          this.router.navigate(['/orders']);
-        },
-        error: (err) => {
-          console.error('Hiba létrehozáskor:', err);
-        }
-      });
+    if (this.id && this.orderService.selectedOrder) {
+      dataToSave = this.orderService.selectedOrder;
     } else {
-      this.orderService.updateOrder(this.orderIdToEdit, this.order).subscribe({
-        next: () => {
-          this.router.navigate(['/orders']);
-        },
-        error: (err) => {
-          console.error('Hiba frissítéskor:', err);
-        }
-      });
+      dataToSave = this.order;
     }
+
+    if (!this.isValid(dataToSave)) {
+      alert("Hiba: Minden mezőt kötelező kitölteni!");
+      return; 
+    }
+
+    const successCallback = () => {
+      this.router.navigate(['/orders']).then(() => {
+        window.location.reload();
+      });
+    };
+
+    if (this.id) {
+      this.orderService.updateOrder(this.id, dataToSave, successCallback);
+    } else {
+      this.orderService.createOrder(dataToSave, successCallback);
+    }
+  }
+
+  private isValid(o: Order): boolean {
+    if (!o.orderName || o.orderName.trim() === '') return false;
+    if (!o.installationAdress || o.installationAdress.trim() === '') return false;
+    if (!o.email || o.email.trim() === '') return false;
+    if (!o.phoneNumber || o.phoneNumber.trim() === '') return false;
+    if (!o.deadline) return false;
+    return true;
   }
 }

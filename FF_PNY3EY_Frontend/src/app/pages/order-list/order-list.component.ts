@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { Order, OrderService } from '../../services/order.service';
+import { OrderService } from '../../services/order.service';
+import { Order } from '../../models/order';
 
 @Component({
   selector: 'app-order-list',
@@ -8,30 +9,26 @@ import { Order, OrderService } from '../../services/order.service';
   styleUrl: './order-list.component.sass'
 })
 export class OrderListComponent {
-  orders: Order[] = [];
   searchTerm: string = '';
-  isDark = false;
 
   constructor(private orderService: OrderService) {
-    this.orderService.getOrders().subscribe(data => {
-      this.orders = data;
-    });
+    this.orderService.loadOrders();
   }
 
   deleteOrder(id: string): void {
     if (confirm('Biztosan törlöd ezt a rendelést?')) {
-      this.orderService.deleteOrder(id).subscribe(() => {
-        this.orders = this.orders.filter(o => o.id !== id);
-      });
+      this.orderService.deleteOrder(id);
     }
   }
 
   filteredOrders(): Order[] {
+    const list = this.orderService.orders;
+
     if (!this.searchTerm.trim()) {
-      return this.orders;
+      return list;
     }
 
-    return this.orders.filter(order =>
+    return list.filter(order =>
       order.orderName.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
   }

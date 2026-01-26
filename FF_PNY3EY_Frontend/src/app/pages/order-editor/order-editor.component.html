@@ -1,96 +1,72 @@
 <div class="container py-4">
-  <form #userForm="ngForm" (ngSubmit)="onSubmit()" class="glass-editor p-4">
-    <h3>Új rendelés</h3>
+  <h2 class="mb-4">{{ id ? 'Rendelés szerkesztése' : 'Új rendelés felvétele' }}</h2>
+
+  <div *ngIf="!id">
 
     <div class="mb-3">
-      <label for="id">Rendelés azonosító</label>
-      <input 
-        type="text"
-        id="id" 
-        name="id" 
-        [(ngModel)]="order.id" 
-        #idModel="ngModel"
-        required
-        class="form-control" 
-        [ngClass]="{'is-invalid': idModel.invalid && idModel.touched}" 
-      />
-      <div *ngIf="idModel.invalid && idModel.touched" class="invalid-feedback">
-        Az azonosító megadása kötelező.
-      </div>
+      <label class="form-label">Rendelés Azonosító</label>
+      <input type="text" class="form-control" [(ngModel)]="order.id">
+    </div>
+    
+    <div class="mb-3">
+      <label class="form-label">Rendelés neve</label>
+      <input type="text" class="form-control" [(ngModel)]="order.orderName">
     </div>
 
     <div class="mb-3">
-      <label for="orderName">Rendelés neve</label>
-      <input 
-        type="text"
-        id="orderName" 
-        name="orderName" 
-        [(ngModel)]="order.orderName" 
-        #nameModel="ngModel"
-        required
-        class="form-control" 
-        [ngClass]="{'is-invalid': nameModel.invalid && nameModel.touched}" 
-      />
+      <label class="form-label">Telepítési cím</label>
+      <input type="text" class="form-control" [(ngModel)]="order.installationAdress">
     </div>
 
     <div class="mb-3">
-      <label for="installationAdress">Telepítési cím</label>
-      <input 
-        type="text"
-        id="installationAdress" 
-        name="installationAdress" 
-        [(ngModel)]="order.installationAdress" 
-        #addressModel="ngModel"
-        required
-        class="form-control" 
-        [ngClass]="{'is-invalid': addressModel.invalid && addressModel.touched}" 
-      />
+      <label class="form-label">Telefonszám</label>
+      <input type="text" class="form-control" [(ngModel)]="order.phoneNumber">
     </div>
 
     <div class="mb-3">
-      <label for="phoneNumber">Telefonszám</label>
-      <input 
-        type="text"
-        id="phoneNumber" 
-        name="phoneNumber" 
-        [(ngModel)]="order.phoneNumber" 
-        #phoneModel="ngModel"
-        required
-        class="form-control" 
-        [ngClass]="{'is-invalid': phoneModel.invalid && phoneModel.touched}" 
-      />
+      <label class="form-label">Email cím</label>
+      <input type="email" class="form-control" [(ngModel)]="order.email">
     </div>
 
     <div class="mb-3">
-      <label for="email">Email</label>
-      <input 
-        id="email" 
-        type="email" 
-        name="email" 
-        [(ngModel)]="order.email" 
-        #emailModel="ngModel"
-        required
-        email
-        class="form-control" 
-        [ngClass]="{'is-invalid': emailModel.invalid && emailModel.touched}" 
-      />
-      </div>
-
-    <div class="mb-3">
-      <label for="deadline">Határidő</label>
-      <input 
-        id="deadline" 
-        type="datetime-local" 
-        name="deadline" 
-        [(ngModel)]="order.deadline" 
-        #deadlineModel="ngModel"
-        required
-        class="form-control" 
-        [ngClass]="{'is-invalid': deadlineModel.invalid && deadlineModel.touched}" 
-      />
+      <label class="form-label">Határidő</label>
+      <input type="date" class="form-control" [(ngModel)]="order.deadline">
     </div>
 
-    <button type="submit" class="btn btn-primary mt-3" [disabled]="userForm.invalid">Mentés</button>
-  </form>
+  </div>
+
+  <div *ngIf="id && orderService.selectedOrder">
+    
+    <div class="mb-3">
+      <label class="form-label">Rendelés neve</label>
+      <input type="text" class="form-control" [(ngModel)]="orderService.selectedOrder.orderName">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Telepítési cím</label>
+      <input type="text" class="form-control" [(ngModel)]="orderService.selectedOrder.installationAdress">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Telefonszám</label>
+      <input type="text" class="form-control" [(ngModel)]="orderService.selectedOrder.phoneNumber">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Email cím</label>
+      <input type="email" class="form-control" [(ngModel)]="orderService.selectedOrder.email">
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Határidő</label>
+      <input type="date" class="form-control" [(ngModel)]="orderService.selectedOrder.deadline">
+    </div>
+
+  </div>
+
+  <div class="mt-4">
+    <button class="btn btn-success me-2" (click)="save()">Mentés</button>
+    <button class="btn btn-secondary" routerLink="/orders">Mégse</button>
+  </div>
+
 </div>
-

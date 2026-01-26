@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SignFactory.Data;
 
@@ -11,9 +12,11 @@ using SignFactory.Data;
 namespace SignFactory.Data.Migrations
 {
     [DbContext(typeof(SignFactoryDbContext))]
-    partial class SignFactoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260126144819_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

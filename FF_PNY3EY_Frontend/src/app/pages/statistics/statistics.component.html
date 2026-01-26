@@ -1,11 +1,14 @@
 <div class="container py-4">
   <h2 class="mb-4">Statisztikák</h2>
 
-  <div class="alert alert-info mb-4 d-flex align-items-center" *ngIf="maxOrder">
-    <i class="bi bi-trophy-fill me-2 fs-4"></i>
+  <div class="alert alert-info mb-4 d-flex align-items-center" *ngIf="orderService.maxOrder">
+    <i class="bi bi-trophy-fill me-3 fs-3"></i>
     <div>
-      A hónap legnagyobb rendelése: <strong>{{ maxOrder.name }}</strong> – 
-      <span class="fs-5 fw-bold">{{ formatCurrency(maxOrder.amount) }}</span>
+      <div class="text-uppercase small fw-bold text-muted">A hónap legnagyobb rendelése</div>
+      <div class="fs-5">
+        <strong>{{ orderService.maxOrder.orderName }}</strong> – 
+        <span class="text-primary fw-bold">{{ orderService.maxOrder.totalValue }}</span>
+      </div>
     </div>
   </div>
 
@@ -17,13 +20,31 @@
           <h5 class="card-title mb-0">Rendelések száma havonta</h5>
         </div>
         <div class="card-body">
-          <div style="height: 300px;" *ngIf="ordersPerMonthChartData.datasets.length > 0; else loading">
-            <canvas baseChart
-              [data]="ordersPerMonthChartData"
-              [options]="ordersPerMonthChartOptions"
-              [type]="'bar'">
-            </canvas>
+          
+          <div class="d-flex align-items-end justify-content-around h-100 pb-3" style="min-height: 250px;">
+            
+            <div *ngFor="let item of orderService.ordersPerMonth" class="text-center w-100 px-1">
+              
+              <div class="bg-primary rounded-top mx-auto position-relative custom-bar"
+                   [style.height.%]="(item.orderCount / getMaxOrderCount()) * 100"
+                   style="width: 40px; transition: height 0.5s ease;">
+                
+                <span class="position-absolute top-0 start-50 translate-middle-x mt-2 text-white fw-bold small">
+                  {{ item.orderCount }}
+                </span>
+              </div>
+              
+              <div class="mt-2 small fw-bold text-muted border-top pt-1">
+                {{ item.year }}.{{ item.month }}
+              </div>
+            </div>
+
+            <div *ngIf="orderService.ordersPerMonth.length === 0" class="text-muted w-100 text-center align-self-center">
+              Nincs adat.
+            </div>
+
           </div>
+
         </div>
       </div>
     </div>
@@ -31,31 +52,33 @@
     <div class="col-md-6 mb-4">
       <div class="card shadow-sm h-100">
         <div class="card-header bg-white">
-          <h5 class="card-title mb-0">Projektek száma a hónapban</h5>
+          <h5 class="card-title mb-0">Projektek eloszlása rendelésenként</h5>
         </div>
-        <div class="card-body">
-          <div style="height: 300px;" *ngIf="projectCountChartData.datasets.length > 0; else noData">
-            <canvas baseChart
-              [data]="projectCountChartData"
-              [options]="projectCountChartOptions"
-              [type]="'doughnut'">
-            </canvas>
+        <div class="card-body overflow-auto" style="max-height: 350px;">
+          
+          <div *ngFor="let item of orderService.projectCounts" class="mb-3">
+            
+            <div class="d-flex justify-content-between mb-1">
+              <span class="fw-bold small">{{ item.orderName }}</span>
+              <span class="badge bg-secondary">{{ item.projectCount }} db</span>
+            </div>
+            
+            <div class="progress" style="height: 20px;">
+              <div class="progress-bar bg-success" 
+                   role="progressbar" 
+                   [style.width.%]="(item.projectCount / getMaxProjectCount()) * 100">
+              </div>
+            </div>
+
           </div>
+
+           <div *ngIf="orderService.projectCounts.length === 0" class="text-center text-muted py-5">
+              Nincs projekt adat ebben a hónapban.
+           </div>
+
         </div>
       </div>
     </div>
 
   </div>
 </div>
-
-<ng-template #loading>
-  <div class="d-flex justify-content-center align-items-center h-100 text-muted">
-    <div class="spinner-border spinner-border-sm me-2"></div> Adatok betöltése...
-  </div>
-</ng-template>
-
-<ng-template #noData>
-  <div class="d-flex justify-content-center align-items-center h-100 text-muted">
-    Nincs megjeleníthető adat ebben a hónapban.
-  </div>
-</ng-template>
